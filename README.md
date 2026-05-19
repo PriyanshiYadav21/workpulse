@@ -185,38 +185,43 @@ All endpoints prefixed with `/api`. Auth required unless noted.
 
 ## Deployment
 
-### Backend → Railway (Simplified & Automated)
+### Option A: Single-Service Monorepo Deployment (Recommended)
 
-1. **Create a Railway Project**:
+This method deploys both the frontend and backend as a single service on Railway. The backend will compile the React app and serve it statically, eliminating CORS configuration issues and reducing Railway resource usage.
+
+1. **Deploy to Railway**:
    - Push your code to your GitHub repository.
    - On Railway, click **New Project** → **Deploy from GitHub repo** and select your repository.
-   - Set the **Root Directory** to `/backend` in the service settings.
+   - Do **not** set a Root Directory (leave it as the default `/`). Railway will detect the root `package.json`, install all dependencies, build the frontend, and start the backend.
 
 2. **Provision MySQL Database**:
-   - In your Railway project dashboard, click **New** → **Database** → **Add MySQL**.
-   - Railway will provision a MySQL service and automatically inject the standard database environment variables (`MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`, `MYSQLPASSWORD`, `MYSQLDATABASE`) into your project.
-   - Since the database configuration has been updated, you **do not need** to manually map or copy these database credentials to `DB_HOST`, `DB_PORT`, etc. They will be detected automatically.
+   - Click **New** → **Database** → **Add MySQL** in your Railway project dashboard.
+   - Railway will provision a MySQL service and automatically inject the standard database environment variables (`MYSQLHOST`, `MYSQLPORT`, etc.) into your service.
 
 3. **Configure Environment Variables**:
-   - Go to your backend service's **Variables** tab and set the following:
+   - Go to your service's **Variables** tab and set the following:
      - `DB_DRIVER` = `mysql` (Forces the backend to use the MySQL driver instead of the SQLite fallback).
      - `JWT_SECRET` = `<a-secure-random-secret-key>`
-     - `CLIENT_URL` = `<your-deployed-frontend-url>` (e.g. `https://your-frontend.vercel.app` or Railway domain).
      - `NODE_ENV` = `production`
+     - The backend will automatically detect the database variables and build the tables on startup. No extra CORS or client URL configurations are needed!
 
-4. **Automatic Schema Bootstrapping**:
-   - The backend service automatically checks if the database tables exist on boot. If not, it parses and executes `schema.sql` to initialize the database tables automatically. No manual shell commands or database imports are needed!
+### Option B: Split-Service Deployment (Separate Frontend & Backend)
 
-### Frontend → Vercel / Railway
+If you prefer to deploy the backend on Railway and the frontend on Vercel or as a separate Railway service:
 
-1. **Import Project**:
-   - Import the `frontend/` folder into Vercel or deploy it as a separate service on Railway.
-2. **Framework Preset**:
-   - Select **Vite** as the framework preset.
-3. **Environment Variables**:
-   - Set `VITE_API_URL` to your backend's API endpoint (e.g. `https://your-backend.up.railway.app/api`).
-4. **CORS Compatibility**:
-   - Ensure `CLIENT_URL` on the backend matches the frontend's deployment URL so CORS is allowed.
+1. **Backend Service (Railway)**:
+   - Create a service and set its **Root Directory** to `/backend`.
+   - Provision a MySQL database in Railway.
+   - Set env variables on the backend service:
+     - `DB_DRIVER` = `mysql`
+     - `JWT_SECRET` = `<a-secure-random-secret-key>`
+     - `NODE_ENV` = `production`
+     - `CLIENT_URL` = `<your-deployed-frontend-url>` (e.g. `https://your-frontend.vercel.app`)
+
+2. **Frontend Service (Vercel or Railway)**:
+   - Import the `frontend/` folder into Vercel or deploy it separately.
+   - Set the framework preset to **Vite**.
+   - Set the env variable: `VITE_API_URL` = `https://your-backend.up.railway.app/api`.
 
 ---
 

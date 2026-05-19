@@ -4,6 +4,9 @@
   "description": "REST API for WorkPulse - modern AI-ready task management",
   "main": "src/server.js",
   "type": "commonjs",
+  "engines": {
+    "node": ">=22.5.0"
+  },
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",

@@ -23,7 +23,8 @@ app.use(cors({
     if (!isProd && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
       return cb(null, true);
     }
-    if (clientUrl && origin === clientUrl) return cb(null, true);
+    if (!clientUrl) return cb(null, true);              // same-origin single service mode
+    if (origin === clientUrl) return cb(null, true);
     return cb(new Error(`Origin ${origin} not allowed by CORS`));
   },
   credentials: true,
@@ -46,6 +47,23 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api', routes);
+
+// Serve frontend static files in production if they are built
+if (isProd) {
+  const fs = require('fs');
+  const frontendDistPath = path.join(__dirname, '../../frontend/dist');
+  if (fs.existsSync(frontendDistPath)) {
+    app.use(express.static(frontendDistPath));
+    app.get('*', (req, res, next) => {
+      // Direct non-API / non-upload routes to React Router index.html
+      if (!req.path.startsWith('/api') && !req.path.startsWith('/uploads')) {
+        res.sendFile(path.join(frontendDistPath, 'index.html'));
+      } else {
+        next();
+      }
+    });
+  }
+}
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
