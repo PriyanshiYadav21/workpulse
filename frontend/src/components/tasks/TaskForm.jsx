@@ -16,7 +16,12 @@ const PRIORITIES = [
   { value: 'urgent', label: 'Urgent' },
 ];
 
+
+import { useAuthStore } from '../../store/authStore';
+
 export default function TaskForm({ initial, onSubmit, onCancel, submitting }) {
+  const user = useAuthStore((s) => s.user);
+  const isMember = user?.role === 'member';
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -51,20 +56,27 @@ export default function TaskForm({ initial, onSubmit, onCancel, submitting }) {
 
   const submit = (e) => {
     e.preventDefault();
-    onSubmit({
-      title: form.title.trim(),
-      description: form.description.trim() || null,
-      status: form.status,
-      priority: form.priority,
-      category: form.category.trim() || null,
-      deadline: form.deadline || null,
-      assigned_to: form.assigned_to ? Number(form.assigned_to) : null,
-    });
+    // Members can only update status
+    if (isMember) {
+      onSubmit({ status: form.status });
+    } else {
+      onSubmit({
+        title: form.title.trim(),
+        description: form.description.trim() || null,
+        status: form.status,
+        priority: form.priority,
+        category: form.category.trim() || null,
+        deadline: form.deadline || null,
+        assigned_to: form.assigned_to ? Number(form.assigned_to) : null,
+      });
+    }
   };
 
   return (
     <form onSubmit={submit} className="space-y-4">
-      <Input label="Title" value={form.title} onChange={(e) => handleChange('title', e.target.value)} required />
+
+      <Input label="Title" value={form.title} onChange={(e) => handleChange('title', e.target.value)} required disabled={isMember} />
+
 
       <label className="block">
         <span className="block text-sm font-medium mb-1.5 text-slate-700 dark:text-slate-300">Description</span>
@@ -73,8 +85,10 @@ export default function TaskForm({ initial, onSubmit, onCancel, submitting }) {
           className="input resize-y"
           value={form.description}
           onChange={(e) => handleChange('description', e.target.value)}
+          disabled={isMember}
         />
       </label>
+
 
       <div className="grid grid-cols-2 gap-3">
         <label className="block">
@@ -93,16 +107,19 @@ export default function TaskForm({ initial, onSubmit, onCancel, submitting }) {
             className="input"
             value={form.priority}
             onChange={(e) => handleChange('priority', e.target.value)}
+            disabled={isMember}
           >
             {PRIORITIES.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
           </select>
         </label>
       </div>
 
+
       <div className="grid grid-cols-2 gap-3">
-        <Input label="Category" value={form.category} onChange={(e) => handleChange('category', e.target.value)} placeholder="Design, Engineering..." />
-        <Input label="Deadline" type="date" value={form.deadline} onChange={(e) => handleChange('deadline', e.target.value)} />
+        <Input label="Category" value={form.category} onChange={(e) => handleChange('category', e.target.value)} placeholder="Design, Engineering..." disabled={isMember} />
+        <Input label="Deadline" type="date" value={form.deadline} onChange={(e) => handleChange('deadline', e.target.value)} disabled={isMember} />
       </div>
+
 
       <label className="block">
         <span className="block text-sm font-medium mb-1.5 text-slate-700 dark:text-slate-300">Assignee</span>
@@ -110,6 +127,7 @@ export default function TaskForm({ initial, onSubmit, onCancel, submitting }) {
           className="input"
           value={form.assigned_to}
           onChange={(e) => handleChange('assigned_to', e.target.value)}
+          disabled={isMember}
         >
           <option value="">Unassigned</option>
           {users.map((u) => <option key={u.id} value={u.id}>{u.name} ({u.email})</option>)}
