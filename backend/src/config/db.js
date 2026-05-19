@@ -10,12 +10,18 @@ let db;
 
 if (driver === 'mysql') {
   const mysql = require('mysql2/promise');
+  const host = process.env.DB_HOST || process.env.MYSQLHOST || 'localhost';
+  const port = Number(process.env.DB_PORT || process.env.MYSQLPORT) || 3306;
+  const user = process.env.DB_USER || process.env.MYSQLUSER || 'root';
+  const password = process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || '';
+  const database = process.env.DB_NAME || process.env.MYSQLDATABASE || 'workpulse';
+
   db = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',
-    port: Number(process.env.DB_PORT) || 3306,
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'workpulse',
+    host,
+    port,
+    user,
+    password,
+    database,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
@@ -24,11 +30,11 @@ if (driver === 'mysql') {
 
   db.getConnection()
     .then((conn) => {
-      console.log(`[db] Connected to MySQL: ${process.env.DB_NAME}`);
+      console.log(`[db] Connected to MySQL database: ${database} on ${host}`);
       conn.release();
     })
     .catch((err) => {
-      console.error('[db] MySQL connection failed:', err.message);
+      console.error(`[db] MySQL connection failed (${host}:${port}):`, err.message);
     });
 } else {
   db = require('../db/sqliteAdapter');
