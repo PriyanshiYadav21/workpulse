@@ -7,6 +7,7 @@ const registerSchema = z.object({
   name: z.string().min(2).max(100),
   email: z.string().email(),
   password: z.string().min(6).max(72),
+  role: z.enum(['admin', 'manager', 'member']).default('member'),
 });
 
 const loginSchema = z.object({
@@ -16,7 +17,7 @@ const loginSchema = z.object({
 
 async function register(req, res, next) {
   try {
-    const { name, email, password } = registerSchema.parse(req.body);
+    const { name, email, password, role } = registerSchema.parse(req.body);
 
     const [existing] = await db.query('SELECT id FROM users WHERE email = ?', [email]);
     if (existing.length) {
@@ -25,11 +26,11 @@ async function register(req, res, next) {
 
     const hash = await bcrypt.hash(password, 10);
     const [result] = await db.query(
-      'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
-      [name, email, hash]
+      'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)',
+      [name, email, hash, role]
     );
 
-    const user = { id: result.insertId, name, email, role: 'member' };
+    const user = { id: result.insertId, name, email, role };
     const token = signToken(user);
     res.status(201).json({ user, token });
   } catch (err) {

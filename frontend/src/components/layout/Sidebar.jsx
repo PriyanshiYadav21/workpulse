@@ -98,6 +98,11 @@ export default function Sidebar({ onNavigate }) {
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold truncate">{user?.name || 'Member'}</p>
           <p className="text-xs text-slate-500 truncate">{user?.email}</p>
+          {user?.role && (
+            <span className="inline-block mt-1 text-xs font-semibold rounded bg-brand-100 text-brand-700 px-2 py-0.5">
+              {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+            </span>
+          )}
         </div>
         <button
           onClick={handleLogout}

@@ -11,7 +11,7 @@ export default function Register() {
   const navigate = useNavigate();
   const register = useAuthStore((s) => s.register);
   const loading = useAuthStore((s) => s.loading);
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [form, setForm] = useState({ name: '', email: '', password: '', role: 'member' });
 
   const submit = async (e) => {
     e.preventDefault();
@@ -88,6 +88,20 @@ export default function Register() {
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
+            <div>
+              <label className="block text-sm font-medium mb-1">Role</label>
+              <select
+                className="input"
+                name="role"
+                value={form.role}
+                onChange={e => setForm({ ...form, role: e.target.value })}
+                required
+              >
+                <option value="admin">Admin</option>
+                <option value="manager">Manager</option>
+                <option value="member">Member</option>
+              </select>
+            </div>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? 'Creating...' : 'Create Account'}
             </Button>
