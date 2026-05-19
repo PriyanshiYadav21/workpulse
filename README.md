@@ -2,7 +2,7 @@
 
 WorkPulse is a premium, futuristic task management workspace designed with a sleek glassmorphic user interface. It features a drag-and-drop Kanban board, real-time analytics dashboard, team collaboration space, task comments, file attachments, and custom activity logging.
 
-The project is structured as a full-stack monorepo featuring a React frontend and an Express backend, supporting automatic database initialization and dual-driver (SQLite / MySQL) compatibility.
+The project is structured as a full-stack monorepo featuring a React frontend and an Express backend, supporting automatic database initialization.
 
 ---
 
@@ -21,7 +21,7 @@ The project is structured as a full-stack monorepo featuring a React frontend an
 
 ### Backend
 - **Node.js + Express** (High-performance API server)
-- **Dual-Driver SQL Adaptability** (Runs on SQLite locally for zero-config development, and MySQL for production deployments)
+- **MySQL Integration** (Connects natively using mysql2 pool connection)
 - **JWT Authentication** (`jsonwebtoken` + `bcryptjs` password hashing)
 - **Multer** (File upload middleware for task attachments)
 - **Security & Optimization**:
@@ -41,7 +41,7 @@ The project is structured as a full-stack monorepo featuring a React frontend an
 │   │   ├── app.js            # Express app configuration & middleware pipeline
 │   │   ├── config/           # Config files (db connection pool)
 │   │   ├── controllers/      # Route controllers (business logic)
-│   │   ├── db/               # SQLite adapter & schema migration scripts
+│   │   ├── db/               # Database initialization & schemas
 │   │   ├── middleware/       # JWT auth, uploads, and error handler middlewares
 │   │   ├── routes/           # REST endpoints
 │   │   └── utils/            # Activity logging & helper utilities
@@ -55,52 +55,12 @@ The project is structured as a full-stack monorepo featuring a React frontend an
 │   │   ├── pages/            # React views (Landing, Dashboard, Settings, etc.)
 │   │   ├── store/            # Zustand global stores
 │   │   └── main.jsx          # React app entry point
-│   ├── vite.config.js        # Vite config with dev api proxying
+│   ├── vite.config.js        # Vite config with api proxying
 │   └── package.json
 │
 ├── package.json              # Monorepo orchestration configuration
 └── README.md
 ```
-
----
-
-## Local Development Setup
-
-### 1. Prerequisites
-- **Node.js** version `22.5.0` or higher (Required for native `node:sqlite` database support).
-
-### 2. Setup Env Variables
-Create a `.env` file in the `backend/` directory:
-```env
-PORT=5000
-NODE_ENV=development
-
-# Authentication
-JWT_SECRET=your_jwt_secret_key_here
-JWT_EXPIRES_IN=7d
-
-# Database Driver: 'sqlite' or 'mysql'
-DB_DRIVER=sqlite
-SQLITE_FILE=./data/workpulse.db
-
-# File Uploads
-UPLOAD_DIR=uploads
-MAX_UPLOAD_MB=10
-```
-
-### 3. Install and Start Development
-From the monorepo root directory:
-```bash
-# 1. Install all dependencies for frontend & backend
-npm install
-
-# 2. Run the backend server in development mode (starts on port 5000)
-npm run dev
-
-# 3. Run the frontend server in development mode (in a new terminal window)
-npm run dev:frontend
-```
-Open **http://localhost:5173** to view the application.
 
 ---
 
@@ -120,7 +80,7 @@ This approach builds and deploys both the frontend and backend under a single Ra
 
 3. **Configure Environment Variables**:
    - Under your Railway service's **Variables** tab, set:
-     - `DB_DRIVER` = `mysql` (Instructs the server to use MySQL instead of SQLite).
+     - `DB_DRIVER` = `mysql` (Instructs the server to use the MySQL driver).
      - `JWT_SECRET` = `your_strong_production_jwt_secret`
      - `NODE_ENV` = `production`
    - On startup, the backend will auto-detect the database credentials and run `schema.sql` to initialize the database tables automatically.
