@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    @apply font-sans antialiased text-slate-900;
+    background-color: #fefae0;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(168,106,36,0.16), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 80%, rgba(254,250,224,0.35), transparent 60%);
+    background-attachment: fixed;
+  }
+  html.dark body {
+    @apply text-cream;
+    background-color: #2d1d0c;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(168,106,36,0.22), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 80%, rgba(254,250,224,0.15), transparent 60%),
+      radial-gradient(ellipse 50% 50% at 10% 90%, rgba(255,211,142,0.12), transparent 60%);
+  }
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-track { background: transparent; }
+  *::-webkit-scrollbar-thumb {
+    background: rgba(168,106,36,0.35);
+    border-radius: 9999px;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgba(168,106,36,0.5);
+  }
+}
+
+@layer components {
+  .glass {
+    background: rgba(254,250,224,0.8);
+    @apply backdrop-blur-xl border border-[#f7e2b0];
+  }
+  .glass-strong {
+    background: rgba(254,250,224,0.92);
+    @apply backdrop-blur-2xl border border-[#f5dea3];
+  }
+  .card {
+    @apply glass rounded-2xl shadow-xl shadow-[#a86a24]/10;
+  }
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-900 via-brand-600 to-brand-400;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5
+           font-semibold text-white
+           bg-gradient-to-r from-brand-700 via-brand-500 to-brand-400
+           hover:from-brand-600 hover:via-brand-400 hover:to-brand-300
+           shadow-glow transition-all active:scale-[0.98];
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5
+           font-medium text-[#5d3e15]
+           bg-[#fff7df]/80 hover:bg-[#fff4d4]
+           border border-[#edd6a1] transition-colors;
+  }
+  .input {
+    @apply w-full rounded-xl px-4 py-2.5 text-sm
+           bg-[#fff7df]/90
+           border border-[#e5cd9d]
+           focus:outline-none focus:ring-2 focus:ring-brand-400/40
+           placeholder:text-slate-500;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+  .skeleton {
+    @apply rounded-xl bg-gradient-to-r from-[#f8e8c5] via-[#fdf3df] to-[#f8e8c5]
+           bg-[length:200%_100%] animate-shimmer;
+  }
+  /* Dark mode overrides for utility components */
+  html.dark .glass {
+    background: rgba(24,28,33,0.6);
+    @apply border border-[#2b1a0d]/40;
+  }
+  html.dark .glass-strong {
+    background: rgba(18,20,24,0.72);
+    @apply border border-[#3a2716]/30;
+  }
+  html.dark .card {
+    @apply rounded-2xl shadow-xl;
+    background: rgba(18,20,24,0.5);
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  html.dark .btn-ghost {
+    @apply text-slate-200;
+    background: rgba(255,255,255,0.02);
+    border-color: rgba(255,255,255,0.04);
+  }
+  html.dark .input {
+    background: rgba(255,255,255,0.02);
+    border-color: rgba(255,255,255,0.06);
+    @apply placeholder:text-slate-400 text-slate-200;
+  }
+}

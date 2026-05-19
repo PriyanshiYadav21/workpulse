@@ -1,0 +1,177 @@
+Build a modern FULL-STACK AI-powered Task Management Web Application.
+
+REFERENCE APP:
+https://team-task-manager-production-92fe.up.railway.app
+
+IMPORTANT:
+Do NOT copy the UI directly.
+Create a much more modern, premium, futuristic, and clean UI with smooth animations, glassmorphism effects, gradients, beautiful cards, modern typography, and responsive layouts.
+
+TECH STACK:
+
+FRONTEND:
+
+* React.js with Vite
+* Tailwind CSS
+* Framer Motion
+* React Router DOM
+* Axios
+* React Icons
+* Zustand for state management
+
+BACKEND:
+
+* Node.js
+* Express.js
+
+DATABASE:
+
+* MySQL
+
+AUTH:
+
+* JWT Authentication
+* bcrypt password hashing
+
+DEPLOYMENT:
+
+* Frontend deployable on Vercel
+* Backend deployable on Railway or Render
+
+UI/UX REQUIREMENTS:
+
+* Dark/Light mode toggle
+* Responsive mobile-first design
+* Modern dashboard layout
+* Sidebar navigation
+* Animated cards
+* Smooth hover effects
+* Loading skeletons
+* Toast notifications
+* Beautiful charts and analytics
+* Premium SaaS-style UI
+* Clean spacing and typography
+
+PAGES REQUIRED:
+
+1. Landing Page
+2. Login Page
+3. Register Page
+4. Dashboard
+5. Task Management Page
+6. Team Collaboration Page
+7. Analytics Page
+8. Settings Page
+9. Profile Page
+10. 404 Page
+
+TASK FEATURES:
+
+* Create task
+* Edit task
+* Delete task
+* Assign task
+* Task priority
+* Task deadline
+* Task categories
+* Drag and drop kanban board
+* Task comments
+* Task attachments
+* Task status tracking
+* Search and filters
+
+TEAM FEATURES:
+
+* Invite team members
+* Team chat UI
+* Activity logs
+* Role-based access
+
+DATABASE TABLES:
+
+* users
+* tasks
+* teams
+* comments
+* notifications
+* attachments
+
+BACKEND FEATURES:
+
+* REST API
+* Authentication middleware
+* Error handling middleware
+* File upload support
+* Validation
+* Modular folder structure
+* Environment variables
+* Secure API practices
+
+FOLDER STRUCTURE:
+Create a professional scalable folder structure for both frontend and backend.
+
+FRONTEND DESIGN:
+Use:
+
+* Tailwind CSS
+* gradient backgrounds
+* glassmorphism cards
+* rounded 2xl components
+* shadows
+* smooth animations
+* premium SaaS look
+* modern sidebar
+* dashboard widgets
+* charts
+* icons
+
+USE THESE COLORS:
+Primary:
+
+* Indigo
+* Blue
+* Purple
+
+Accent:
+
+* Cyan
+* Emerald
+
+TYPOGRAPHY:
+Modern clean typography similar to Linear, Notion, and Vercel dashboards.
+
+CREATE:
+
+* Fully working frontend
+* Fully working backend
+* MySQL integration
+* API routes
+* Database schema
+* Authentication system
+* Reusable React components
+* Responsive layouts
+
+ALSO INCLUDE:
+
+* .env examples
+* package.json dependencies
+* SQL schema
+* setup instructions
+* deployment instructions
+
+IMPORTANT:
+Generate production-ready code.
+Use best practices.
+Use reusable clean architecture.
+Code should be beginner-friendly and easy to understand.
+
+OUTPUT FORMAT:
+
+1. Folder structure
+2. Frontend code
+3. Backend code
+4. SQL schema
+5. API routes
+6. Deployment steps
+7. Setup instructions
+8. Final run commands
